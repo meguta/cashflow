@@ -2,7 +2,7 @@
 
 ## About
 
-This is a simple budget tracking about, focused around the idea of 'cashflow'
+This is a simple budget tracking web application, focused around the idea of 'cashflow'.
 
 ## How To Run
 
