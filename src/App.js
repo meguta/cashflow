@@ -5,7 +5,7 @@ import {
   FormControl, FormLabel, FormErrorMessage, FormHelperText,
   NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
   RadioGroup, Stack, Radio,
-  Select,
+  useToast,
   Input,
   useDisclosure
 } from "@chakra-ui/react"
@@ -21,23 +21,38 @@ function App() {
   const [cashFlowDate, setCashFlowDate] = useState("")
   const [cashFlowBudget, setCashFlowBudget] = useState("budget1")
 
+  const [transactionList, setTransactionList] = useState([])
+
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
   
-  function handleUpdateCashflow() {
+  function handleUpdateCashflow(e) {
     if (cashFlowAmount > 0) {
       console.log(cashFlowAmount)
       setCashIn(curr => (Number(curr)+Number(cashFlowAmount)))
     } else if (cashFlowAmount < 0) {
       setCashOut(curr => (Number(curr)-Number(cashFlowAmount)))
     }
-    console.log(cashFlowDate)
+    const transaction = {
+      value: Number(cashFlowAmount),
+      time: cashFlowDate,
+      budget: cashFlowBudget}
+    setTransactionList(prev => [...prev, transaction])
+    console.log(transactionList)
+
+    toast({title: 'CashFlow updated.',
+           description: "You've added a CashFlow of $" + Number(cashFlowAmount).toFixed(2) + ".",
+           status: 'success',
+           duration: 9000,
+           isClosable: true})
+    onClose(e)
   }
 
   return (
     <Flex height="100vh" bg="gray.200" alignItems="center" direction="column">
-      <Text fontSize="2xl" fontWeight="extrabold">Cashflow</Text>
+      <Text fontSize="2xl" color="gray.500" fontWeight="extrabold">Cashflow</Text>
       <Flex justifyContent="center" direction="column" alignItems="">
-        <Text color="gray.600" fontSize="6xl">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))} cashflow</Text>
+        <Text color="gray.600" fontSize="6xl" fontWeight="semibold">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))} cashflow</Text>
         <Text fontSize="xl" color="gray.600">${cashIn.toFixed(2)} in</Text>
         <Text fontSize="xl" color="gray.600">${cashOut.toFixed(2)} out</Text>
         <Progress colorScheme="gray" value={60} />
@@ -89,8 +104,8 @@ function App() {
                     onChange={setCashFlowDate}
                   />
                   <FormLabel>What budget group is this CashFlow for?</FormLabel>
-                  <RadioGroup>
-                    <Stack direction="row" value={cashFlowBudget} onChange={setCashFlowBudget}>
+                  <RadioGroup value={cashFlowBudget} onChange={setCashFlowBudget}>
+                    <Stack direction="row">
                       <Radio value="budget1">Budget 1</Radio>
                       <Radio value="budget2">Budget 2</Radio>
                       <Radio value="budget3">Budget 3</Radio>
