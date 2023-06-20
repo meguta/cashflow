@@ -4,7 +4,8 @@ import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
   FormControl, FormLabel, FormErrorMessage, FormHelperText,
   NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  RadioGroup, HStack, Radio,
+  RadioGroup, Stack, Radio,
+  Select,
   Input,
   useDisclosure
 } from "@chakra-ui/react"
@@ -16,7 +17,21 @@ function App() {
   const [cashIn, setCashIn] = useState(32.22)
   const [cashOut, setCashOut] = useState(16.33)
 
+  const [cashFlowAmount, setCashFlowAmount] = useState(0)
+  const [cashFlowDate, setCashFlowDate] = useState("")
+  const [cashFlowBudget, setCashFlowBudget] = useState("budget1")
+
   const { isOpen, onOpen, onClose } = useDisclosure()
+  
+  function handleUpdateCashflow() {
+    if (cashFlowAmount > 0) {
+      console.log(cashFlowAmount)
+      setCashIn(curr => (Number(curr)+Number(cashFlowAmount)))
+    } else if (cashFlowAmount < 0) {
+      setCashOut(curr => (Number(curr)-Number(cashFlowAmount)))
+    }
+    console.log(cashFlowDate)
+  }
 
   return (
     <Flex height="100vh" bg="gray.200" alignItems="center" direction="column">
@@ -57,15 +72,8 @@ function App() {
             <ModalBody>
               <Flex>
                 <FormControl>
-                  <FormLabel>What type of CashFlow is this?</FormLabel>
-                  <RadioGroup>
-                    <HStack>
-                      <Radio>Positive</Radio>
-                      <Radio>Negative</Radio>
-                    </HStack>
-                  </RadioGroup>
                   <FormLabel>What was the amount of CashFlow</FormLabel>
-                  <NumberInput defaultValue={15} min={10} max={20}>
+                  <NumberInput value={cashFlowAmount} onChange={setCashFlowAmount}>
                     <NumberInputField />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
@@ -77,14 +85,24 @@ function App() {
                     placeholder="Select Date and Time"
                     size="md"
                     type="datetime-local"
+                    value={cashFlowDate}
+                    onChange={setCashFlowDate}
                   />
+                  <FormLabel>What budget group is this CashFlow for?</FormLabel>
+                  <RadioGroup>
+                    <Stack direction="row" value={cashFlowBudget} onChange={setCashFlowBudget}>
+                      <Radio value="budget1">Budget 1</Radio>
+                      <Radio value="budget2">Budget 2</Radio>
+                      <Radio value="budget3">Budget 3</Radio>
+                    </Stack>
+                  </RadioGroup>
                 </FormControl>
               </Flex>
             </ModalBody>
 
             <ModalFooter>
               <Button mr={3} onClick={onClose}>Close</Button>
-              <Button variant="ghost">Secondary Action</Button>
+              <Button colorScheme="green" variant="ghost" onClick={handleUpdateCashflow}>Update CashFlow</Button>
             </ModalFooter>
           </ModalContent>
 
