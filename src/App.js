@@ -1,5 +1,5 @@
 import {
-  Box, Flex, Text, Progress, Button,
+  Box, Flex, Text, Heading, Progress, Button,
   Tabs, TabList, TabPanels, Tab, TabPanel,
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
   FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -7,13 +7,16 @@ import {
   RadioGroup, Stack, Radio,
   useToast,
   Input,
-  useDisclosure
+  Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup,
+  useDisclosure,
+  useColorMode
 } from "@chakra-ui/react"
 
 import { useState } from 'react'
 
 
-function App() {
+function App() { 
+  const {toggleColorMode} = useColorMode()
   const [cashIn, setCashIn] = useState(32.22)
   const [cashOut, setCashOut] = useState(16.33)
 
@@ -48,34 +51,48 @@ function App() {
     onClose(e)
   }
 
+
+  function displayBudget(budgetName) {
+    const budgetTransactions = transactionList.filter(trans => trans.budget === budgetName)
+    const budgetRender = budgetTransactions.map(trans =>
+      <Flex width="100%" background="gray.300" rounded="md" boxShadow="inner" padding="4" margin="2"justifyContent="space-between">
+        <Text>Category</Text>
+        <Box>
+          <Text>{ trans.value > 0 ? "+ $"+trans.value : "- $"+trans.value}</Text>
+          <Text>{Date(trans.time)}</Text>
+        </Box>
+
+      </Flex>
+      
+
+      )
+    return budgetRender
+  }
+
   return (
     <Flex height="100vh" bg="gray.200" alignItems="center" direction="column">
-      <Text fontSize="2xl" color="gray.500" fontWeight="extrabold">Cashflow</Text>
-      <Flex justifyContent="center" direction="column" alignItems="">
-        <Text color="gray.600" fontSize="6xl" fontWeight="semibold">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))} cashflow</Text>
-        <Text fontSize="xl" color="gray.600">${cashIn.toFixed(2)} in</Text>
-        <Text fontSize="xl" color="gray.600">${cashOut.toFixed(2)} out</Text>
-        <Progress colorScheme="gray" value={60} />
+    <Text fontSize="2xl" color="gray.400" fontWeight="extrabold">Cashflow</Text>
+      <Flex color="gray.500" boxShadow="md" rounded="lg" padding="10" paddingTop="5" background="gray.300" justifyContent="center" direction="column">
+        <Text textAlign="center" fontSize="2xl" fontWeight="bold">Total CashFlow</Text>
+        <Box>
+          <Text as="span" color="gray.600" fontSize="8xl" fontWeight="semibold">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))}</Text>
+          <Text as="span"> of CashFlow</Text>
+        </Box>
+        <Flex justifyContent="space-between">
+          <Text fontSize="xl" color="gray.600">${cashIn.toFixed(2)} in</Text>
+          <Text fontSize="xl" color="gray.600">${cashOut.toFixed(2)} out</Text>
+        </Flex>
       </Flex>
-      <Flex justifyContent="space-between">
-        <Tabs>
-          <TabList>
-            <Tab>Budget 1</Tab>
-            <Tab>Budget 2</Tab>
-            <Tab>Budget 3</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <Text fontWeight="medium">Recent Transactions</Text>
-            </TabPanel>
-            <TabPanel>
-              <Text fontWeight="medium">Recent Transactions</Text>
-            </TabPanel>
-            <TabPanel>
-              <Text>Recent Transactions</Text>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+      <Flex width="40vw" margin="10"  justifyContent="center" direction="column">
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading as="span" textAlign="start " color="gray.500">Recent Transactions</Heading>
+          <Text color="gray.400" as="span">View All</Text>
+        </Flex>
+      <Flex direction="column" justifyContent="center">
+        {displayBudget("budget1")}
+        {displayBudget("budget2")}
+        {displayBudget("budget3")}
+      </Flex>
       </Flex>
       <Flex>
         <Button onClick={onOpen}>Change CashFlow</Button>
@@ -99,9 +116,9 @@ function App() {
                   <Input
                     placeholder="Select Date and Time"
                     size="md"
-                    type="datetime-local"
+                    type="date"
                     value={cashFlowDate}
-                    onChange={setCashFlowDate}
+                    onChange={(e) => {setCashFlowDate(e.target.value)}}
                   />
                   <FormLabel>What budget group is this CashFlow for?</FormLabel>
                   <RadioGroup value={cashFlowBudget} onChange={setCashFlowBudget}>
@@ -125,6 +142,7 @@ function App() {
 
         <Button>Edit Current Budget</Button>
       </Flex>
+      <Button onClick={toggleColorMode}>Toggle Darkmode</Button>
     </Flex>
   );
 }
