@@ -23,7 +23,7 @@ import { useState } from "react"
 
 
 
-function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudgetDivisions, transactionList, sortByDate }) {
+function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudgetDivisions, transactionList, sortByDate, containerBg, bgColor }) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -71,10 +71,10 @@ function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudget
             return
         } else {
             setBudgetDivisions([
-                {name: "Wants", value: tempBudget[0]},
-                {name: "Needs", value: tempBudget[1]},
-                {name: "Savings", value: tempBudget[2]},
-        ])
+                { name: "Wants", value: tempBudget[0] },
+                { name: "Needs", value: tempBudget[1] },
+                { name: "Savings", value: tempBudget[2] },
+            ])
             setValidBudget(true)
         }
     }
@@ -132,35 +132,35 @@ function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudget
     function displayRecentBudgetTransactions(budgetName) {
         const filteredBudget = sortByDate(transactionList).filter(trans => trans.budget == budgetName)
         return filteredBudget.map(trans =>
-            <Flex boxShadow="md" backgroundColor="gray.200" rounded="md" p="1" justifyContent="space-between">
-                <Text fontWeight="bold">{trans.value > 0 ? "$ " + trans.value.toFixed(2) : "- $ " + (-trans.value).toFixed(2)}</Text>
-                <Text color="gray.400">{trans.note != "" ? trans.note + ", " : ""}{moment(trans.time, "YYYY-MM-DD").calendar()}</Text>
+            <Flex boxShadow="md" bg="container_bg" borderColor="primary_bg" borderWidth="2px" rounded="md" p="1" m="1" justifyContent="space-between">
+                <Text variant="primary" fontWeight="bold">{trans.value > 0 ? "$ " + trans.value.toFixed(2) : "- $ " + (-trans.value).toFixed(2)}</Text>
+                <Text variant="alt">{trans.note != "" ? trans.note + ", " : ""}{moment(trans.time, "YYYY-MM-DD").calendar()}</Text>
             </Flex>
         )
     }
     function displayCardBudget() {
         const budgetCards = budgetDivisions.map(budget =>
             <Card>
-                <CardHeader>
-                    <Heading size="md">{budget.name}</Heading>
+                <CardHeader borderBottom="1px" borderColor="secondary_container_bg">
+                    <Heading variant="primary" size="md">{budget.name}</Heading>
                 </CardHeader>
-                <CardBody>
+                <CardBody bg="container_bg">
                     <Stack divider={<StackDivider />}>
                         <Box>
-                            <Heading size="xs" textTransform="uppercase">Overview</Heading>
+                            <Heading variant="primary" size="xs" textTransform="uppercase">Overview</Heading>
                             <HStack>
                                 <CircularProgress value={getBudgetUsage(budget.name)} >
                                     <CircularProgressLabel>{getBudgetUsage(budget.name)}%</CircularProgressLabel>
                                 </CircularProgress>
-                                <Text>Your current usage for this budget is ${getBudgetUsage(budget.name)} out of ${getTotalBudget(budget.name)}.</Text>
+                                <Text variant="primary">Your current usage for this budget is ${getBudgetUsage(budget.name)} out of ${getTotalBudget(budget.name)}.</Text>
                             </HStack>
-                            <Text as="span" color="gray.500">Currently, your </Text>
-                            <Text as="span" fontWeight="bold">{budget.name}</Text>
-                            <Text as="span" color="gray.500"> budget is set to </Text>
-                            <Text as="span" fontWeight="bold">{budget.value}%</Text>
+                            <Text as="span" variant="alt">Currently, your </Text>
+                            <Text as="span" variant="primary" fontWeight="bold">{budget.name}</Text>
+                            <Text as="span" variant="alt"> budget is set to </Text>
+                            <Text as="span" variant="primary" fontWeight="bold">{budget.value}%.</Text>
                         </Box>
                         <Box>
-                            <Heading size="xs" textTransform="uppercase">Transactions</Heading>
+                            <Heading variant="primary" size="xs" textTransform="uppercase">Transactions</Heading>
                             <Stack>
                                 {displayRecentBudgetTransactions(budget.name)}
                             </Stack>
@@ -175,8 +175,8 @@ function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudget
     }
 
     return (
-        <Stack divider={<StackDivider />} p="5rem" width="100vw" height="100vh" backgroundColor="gray.200" direction="column" alignItems="center">
-            <Heading>Budget Page</Heading>
+        <Stack divider={<StackDivider />} p="5rem" pr="10rem" pl="10rem" width="100vw" height="100vh" bg="primary_bg" direction="column" alignItems="center">
+            <Heading variant="alt">Your Budgets</Heading>
             <HStack>
                 {displayCardBudget()}
             </HStack>

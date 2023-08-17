@@ -11,7 +11,8 @@ import {
   Icon,
   useColorMode,
   InputLeftAddon,
-  Divider, Link
+  Divider, Link,
+  Fade, ScaleFade, Slide, SlideFade, Collapse, Container
 } from "@chakra-ui/react"
 
 import { MdAttachMoney, MdOutlineAccessTime, MdCategory, MdOutlineStickyNote2 } from 'react-icons/md'
@@ -26,70 +27,40 @@ function Homepage({
   cashFlowNote, setCashFlowNote,
   transactionList, setTransactionList,
   getTotalBudget, getBudgetUsage,
-  budgetDivisons, setBudgetDivisions, currentPage, setCurrentPage
+  budgetDivisons, setBudgetDivisions, currentPage, setCurrentPage, containerBg, bgColor
 }) {
   const { toggleColorMode } = useColorMode()
 
-  
   function displayBudgetBreakdown() {
     return (
-      <Flex colorScheme="gray" direction="column" alignItems="center">
-        <Tabs colorScheme="gray" boxShadow="md" variant="enclosed" margin="1" isFitted padding="5" rounded="lg">
-        <Heading fontSize="2xl" textAlign="center ">Budget Breakdown</Heading>
-          <TabList colorScheme="gray" p="1rem">
+      <Flex width={["100%", "50%"]} height="100%" background={containerBg} direction="column" alignItems="center" rounded="lg" boxShadow="md">
+        <Tabs width="100%" variant="enclosed" margin="1" isFitted padding="5">
+          <Heading variant="primary" fontSize="2xl" textAlign="center ">Budget Breakdown</Heading>
+          <TabList p="1rem" pb="0" outline={containerBg}>
             <Tab>Wants</Tab>
             <Tab>Needs</Tab>
             <Tab>Savings</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>
-              <Stack>
-                <Flex rounded="lg" padding="5" alignItems="center">
-                  <CircularProgress size="100" value={getBudgetUsage("Wants")} mr="5">
-                    <CircularProgressLabel>{getBudgetUsage("Wants")}%</CircularProgressLabel>
-                  </CircularProgress>
-                  <Box>
-                    <Heading fontSize="3xl">Wants</Heading>
-                    <Text as="span">Total Budget</Text> <Text as="span" fontWeight="bold">${getTotalBudget("Wants")}</Text>
-                    <br />
-                    <Text as="span">CashFlow Percentage</Text> <Text as="span" fontSize="md" fontWeight="bold">{budgetDivisons["Wants"]}%</Text>
-                  </Box>
-                </Flex>
-              </Stack>
+            {
+              budgetDivisons.map(budget =>
+                <TabPanel>
+                  <Stack>
+                    <Flex rounded="lg" p="5" alignItems="center">
+                      <CircularProgress size="100" value={getBudgetUsage(budget.name)} mr="5">
+                        <CircularProgressLabel>{getBudgetUsage(budget.name)}%</CircularProgressLabel>
+                      </CircularProgress>
+                      <Box>
+                        <Heading variant="primary" fontSize="3xl">{budget.name}</Heading>
+                        <Text variant="alt" as="span">Total Budget: </Text> <Text variant="primary" as="span" fontWeight="bold">${getTotalBudget(budget.name)}</Text>
+                        <br />
+                        <Text variant="alt" as="span">CashFlow Percentage: </Text> <Text variant="primary" as="span" fontSize="md" fontWeight="bold">{budget.value}%</Text>
+                      </Box>
 
-            </TabPanel>
-            <TabPanel>
-              <Stack>
-                <Flex rounded="lg" padding="5" alignItems="center">
-                  <CircularProgress size="100" value={getBudgetUsage("Needs")} mr="5">
-                    <CircularProgressLabel>{getBudgetUsage("Needs")}%</CircularProgressLabel>
-                  </CircularProgress>
-                  <Box>
-                    <Heading fontSize="3xl">Needs</Heading>
-                    <Text as="span" color="gray.500">Total Budget</Text> <Text as="span" fontWeight="bold">${getTotalBudget("Needs")}</Text>
-                    <br />
-                    <Text as="span" color="gray.500">CashFlow Percentage</Text> <Text as="span" fontSize="md" fontWeight="bold">{budgetDivisons["Needs"]}%</Text>
-                  </Box>
-                </Flex>
-              </Stack>
-
-            </TabPanel>
-            <TabPanel>
-              <Stack>
-                <Flex rounded="lg" padding="5" alignItems="center">
-                  <CircularProgress size="100" value={getBudgetUsage("Savings")} mr="5">
-                    <CircularProgressLabel>{getBudgetUsage("Savings")}%</CircularProgressLabel>
-                  </CircularProgress>
-                  <Box>
-                    <Heading fontSize="3xl">Savings</Heading>
-                    <Text as="span" color="gray.500">Total Budget</Text> <Text as="span" fontWeight="bold">${getTotalBudget("Savings")}</Text>
-                    <br />
-                    <Text as="span" color="gray.500">CashFlow Percentage</Text> <Text as="span" fontSize="md" fontWeight="bold">{budgetDivisons["Savings"]}%</Text>
-                  </Box>
-                </Flex>
-              </Stack>
-
-            </TabPanel>
+                    </Flex>
+                  </Stack>
+                </TabPanel>)
+            }
           </TabPanels>
         </Tabs>
 
@@ -101,16 +72,16 @@ function Homepage({
   function displayRecentTransactions() {
     const sliceTransaction = transactionList.slice(-3).reverse()
     const transactionRender = sliceTransaction.map(trans =>
-      <Flex width="100%" background="gray.300" rounded="md" boxShadow="inner" padding="4" margin="2" justifyContent="space-between">
+      <Flex width="95%" border="2px" borderColor={bgColor} boxShadow="lg" rounded="md" padding="4" margin="2" justifyContent="space-between">
         <Box>
 
-          <Text as="span" color="gray.500" margin="2">{trans.budget}</Text>
-          <Text as="span" fontSize="xl" textAlign="start" margin="2">{trans.note}</Text>
+          <Text variant="alt" as="span" margin="2">{trans.budget}</Text>
+          <Text variant="alt" as="span" fontSize="xl" textAlign="start" margin="2">{trans.note}</Text>
 
         </Box>
         <Box>
-          <Text>{trans.value > 0 ? "+ $" + trans.value : "- $" + (-trans.value)}</Text>
-          <Text color="gray.400">{moment(trans.time, "YYYY-MM-DD").calendar()}</Text>
+          <Text variant="primary">{trans.value > 0 ? "+ $" + trans.value : "- $" + (-trans.value)}</Text>
+          <Text variant="alt">{moment(trans.time, "YYYY-MM-DD").calendar()}</Text>
         </Box>
 
       </Flex>
@@ -121,37 +92,38 @@ function Homepage({
   }
 
   return (
-    <Stack p="3rem" spacing="10" bg="gray.200" alignItems="center" direction="column">
-      <HStack>
-        <Flex color="gray.500" boxShadow="md" rounded="lg" padding="10" paddingTop="5" background="gray.300" justifyContent="center" direction="column">
-          <Text textAlign="center" fontSize="2xl" fontWeight="bold">Total CashFlow</Text>
-          <Box>
-            <Text as="span" color="gray.600" fontSize="8xl" fontWeight="semibold">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))}</Text>
-            <Text as="span"> of CashFlow</Text>
-          </Box>
+    <Stack justify="center" width="100%" pt="4rem" pb="8rem" pr={["0.5rem", "2rem", "2rem", "10rem"]} pl={["0.5rem", "2rem", "2rem", "10rem"]} spacing="2rem" bg="primary_bg" >
+      <Heading variant="alt" textAlign="center">Your Overview</Heading>
+      <Stack background="primary_bg" spacing="2rem" justify="center" direction={["column", "column", "row", "row"]}>
+        <Flex width={["100%", "50%"]}height="100%" boxShadow="md" rounded="lg" padding="10" paddingTop="5" background="container_bg" justifyContent="center" direction="column" alignContent="center">
+          <Heading variant="primary" textAlign="center" fontSize={["2xl", "2xl", "4xl", "4xl"]} fontWeight="bold">Total CashFlow</Heading>
+          <Stack justifyContent="center" alignItems="center" spacing="2" direction="column">
+            <Text textAlign="center" variant="primary" fontSize={["4xl", "6xl", "6xl", "8xl"]} fontWeight="semibold">{(cashIn >= cashOut ? "+ $" + (cashIn - cashOut).toFixed(2) : "- $" + (cashOut - cashIn).toFixed(2))}</Text>
+            <Text textAlign="center" variant="alt"> of CashFlow</Text>
+
+          </Stack>
           <Flex justifyContent="space-between">
-            <Text fontSize="xl" color="gray.600">${cashIn.toFixed(2)} in</Text>
-            <Text fontSize="xl" color="gray.600">${cashOut.toFixed(2)} out</Text>
+            <Text fontSize="xl" variant="alt">${cashIn.toFixed(2)} in</Text>
+            <Text fontSize="xl" variant="alt">${cashOut.toFixed(2)} out</Text>
           </Flex>
         </Flex>
         {displayBudgetBreakdown()}
 
-      </HStack>
+      </Stack>
       <Stack width="100%" alignItems="center" justifyContent="center">
 
-        <Flex width="80vw" justifyContent="center" direction="column">
-          <Flex justifyContent="space-between" alignItems="center">
-            <Heading as="span" textAlign="start" color="gray.500">Recent Transactions</Heading>
-            <Link onClick={() => setCurrentPage("TransactionPage") } color="gray.400" as="span">View All</Link>
+        <Flex pb="10" bg={containerBg} width="100%" rounded="lg" justifyContent="center" direction="column">
+          <Flex p="10" justifyContent="space-between" alignItems="center">
+            <Heading as="span" textAlign="start" variant="primary">Recent Transactions</Heading>
+            <Link onClick={() => setCurrentPage("TransactionPage")} color="gray.400" as="span">View All</Link>
           </Flex>
-          <Flex direction="column" justifyContent="center">
+          <Flex width="100%" direction="column" justifyContent="center" alignItems="center">
             {displayRecentTransactions()}
           </Flex>
         </Flex>
 
       </Stack>
-      
-      <Button onClick={toggleColorMode}>Toggle Darkmode</Button>
+
     </Stack>
   );
 }

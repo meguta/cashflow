@@ -10,7 +10,7 @@ function TransactionPage({ transactionList, setTransactionList, sortByDate }) {
     function displayAllTransactions() {
         const reverseTransactions = sortByDate(transactionList).reverse()
         const allTransactions = reverseTransactions.map(trans =>
-            <Tr>
+        <Tr color="mainText" borderTop="2px" borderBottom="2px" borderColor="secondary_container_bg">
                 <Td>{trans.time}</Td>
                 <Td>${Math.abs(trans.value).toFixed(2)}</Td>
                 <Td>{trans.budget}</Td>
@@ -21,10 +21,10 @@ function TransactionPage({ transactionList, setTransactionList, sortByDate }) {
         return allTransactions
     }
     return (
-    <Flex p="5rem" pl="" width="100vw" height="100vh" backgroundColor="gray.200">
+    <Flex pr="10rem" pl="10rem"  width="100vw" height="100vh" bg="primary_bg">
             <Stack width="100%">
-                <Heading>Your Transactions</Heading>
-                <TableContainer backgroundColor="gray.300" p="5" rounded="md" boxShadow="md" width="100">
+                <Heading pt="4rem" pb="2rem" textAlign="center" variant="alt">Your Transactions</Heading>
+                <TableContainer bg="container_bg" p="5" rounded="md" boxShadow="md" width="100">
                     <Table variant='simple'>
                         <TableCaption>All of your CashFlow transactions.</TableCaption>
                         <Thead>

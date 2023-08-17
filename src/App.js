@@ -10,7 +10,6 @@ import { useColorModeValue } from "@chakra-ui/react";
 
 
 function App() {
-
   const [currentPage, setCurrentPage] = useState("Homepage")
 
   const [cashIn, setCashIn] = useState(0)
@@ -37,6 +36,9 @@ function App() {
       value: 20
     }
   ])
+
+  const containerBg = useColorModeValue("primary.light", "primary.dark")
+  const bgColor = useColorModeValue("bg.light", "bg.dark")
 
   function getTotalBudget(index) {
     let budgetCashIn = 0
@@ -101,6 +103,8 @@ function App() {
         budgetDivisons={budgetDivisions} setBudgetDivisions={setBudgetDivisions}
 
         currentPage={currentPage} setCurrentPage={setCurrentPage}
+
+        containerBg={containerBg} bgColor={bgColor}
       />
     } else if (currentPage == "TransactionPage") {
       return <TransactionPage transactionList={transactionList} setTransactionList={setTransactionList}
@@ -109,11 +113,11 @@ function App() {
     } else if (currentPage == "BudgetPage") {
       return <BudgetPage getTotalBudget={getTotalBudget} getBudgetUsage={getBudgetUsage}
         budgetDivisions={budgetDivisions} setBudgetDivisions={setBudgetDivisions}
-        transactionList={transactionList} sortByDate={sortByDate} />
+        transactionList={transactionList} sortByDate={sortByDate}/>
     }
   }
   return <>
-    <Navbar page={currentPage} setPage={setCurrentPage} />
+    <Navbar page={currentPage} setPage={setCurrentPage} containerBg={containerBg}/>
     {displayPage()}
     <Footer
       cashIn={cashIn} setCashIn={setCashIn}

@@ -1,8 +1,8 @@
 import {
-    Flex, Text,
+    HStack, Flex, Text,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
     InputGroup, Tabs, TabList, Tab, TabPanels, TabPanel, FormControl, InputLeftAddon, Icon, Input,
-    useDisclosure, Divider, Stack, Radio, Button, IconButton, RadioGroup, useToast
+    useDisclosure, Divider, Stack, Radio, Button, IconButton, RadioGroup, useToast, useColorMode
 } from "@chakra-ui/react"
 
 import {AddIcon} from '@chakra-ui/icons'
@@ -18,6 +18,7 @@ function Footer({
 }) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
+    const {toggleColorMode} = useColorMode()
 
     function handleUpdateCashflow(e) {
         if (e.currentTarget.id === "in") {
@@ -159,10 +160,11 @@ function Footer({
         )
     }
     return (
-        <Flex  boxShadow="inner"justifyContent="center" background="gray.300" padding="1rem" width="100%" position="fixed" bottom="1rem">
+        <HStack boxShadow="inner"justifyContent="center" background="container_bg" padding="1rem" width="100%" position="fixed" bottom="0rem">
             <Button icon={<AddIcon/>} onClick={onOpen}>Change CashFlow</Button>
             {changeCashFlowModal()}
-        </Flex>
+            <Button onClick={toggleColorMode}>Toggle Darkmode</Button>
+        </HStack>
     )
 }
 
