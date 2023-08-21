@@ -21,7 +21,7 @@ function TransactionPage({ transactionList, setTransactionList, sortByDate }) {
         return allTransactions
     }
     return (
-    <Flex pr="10rem" pl="10rem"  width="100vw" height="100vh" bg="primary_bg">
+    <Flex pr={["1rem", "2rem", "2rem", "10rem"]} pl={["1rem", "2rem", "2rem", "10rem"]}  width="100vw" height="100vh" bg="primary_bg">
             <Stack width="100%">
                 <Heading pt="4rem" pb="2rem" textAlign="center" variant="alt">Your Transactions</Heading>
                 <TableContainer bg="container_bg" p="5" rounded="md" boxShadow="md" width="100">
