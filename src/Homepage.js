@@ -34,7 +34,7 @@ function Homepage({
 
   function displayBudgetBreakdown() {
     return (
-      <Flex width="100%" height="100%" background={containerBg} direction="column" alignItems="center" rounded="lg" boxShadow="md">
+      <Flex width="100%" height="100%" background={containerBg} direction="column" alignItems="center" rounded="lg" boxShadow="md" justifyContent="center">
         <Tabs width="100%" variant="enclosed" margin="1" isFitted padding="5">
           <Heading variant="primary" fontSize="2xl" textAlign="center ">Budget Breakdown</Heading>
           <TabList p="1rem" pb="0" outline={containerBg}>
@@ -46,12 +46,12 @@ function Homepage({
             {
               budgetDivisons.map(budget =>
                 <TabPanel>
-                  <Stack spacing="3rem" width="100%" direction={["column", "column", "row", "row"]}>
+                  <Stack justifyContent="space-between" spacing="3rem" width="100%" direction={["column", "column", "row", "row"]}>
                     <Box>
                       <Heading variant="primary" fontSize="3xl">{budget.name}</Heading>
-                      <Text variant="alt" as="span">Total Budget: </Text> <Text variant="primary" as="span" fontWeight="bold">${getTotalBudget(budget.name)}</Text>
+                      <Text variant="alt" as="span">With a total budget of </Text> <Text variant="primary" as="span" fontWeight="bold">${getTotalBudget(budget.name)}</Text>
                       <br />
-                      <Text variant="alt" as="span">CashFlow Percentage: </Text> <Text variant="primary" as="span" fontSize="md" fontWeight="bold">{budget.value}%</Text>
+                      <Text variant="alt" as="span">And, a CashFlow Percentage of </Text> <Text variant="primary" as="span" fontSize="md" fontWeight="bold">{budget.value}%</Text>
                     </Box>
                     <Flex rounded="lg" alignItems="center" direction={["column", "column", "row"]}>
                       <CircularProgress size="100" value={getBudgetUsage(budget.name)} mr="5">

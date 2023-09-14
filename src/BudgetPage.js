@@ -140,12 +140,12 @@ function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudget
     }
     function displayCardBudget() {
         const budgetCards = budgetDivisions.map(budget =>
-            <Card>
+            <Card minWidth="300px">
                 <CardHeader borderBottom="1px" borderColor="secondary_container_bg">
                     <Heading variant="primary" size="md">{budget.name}</Heading>
                 </CardHeader>
                 <CardBody bg="container_bg">
-                    <Stack divider={<StackDivider />}>
+                    <Stack divider={<StackDivider />} >
                         <Box>
                             <Heading variant="primary" size="xs" textTransform="uppercase">Overview</Heading>
                             <HStack>
@@ -175,11 +175,11 @@ function BudgetPage({ getTotalBudget, getBudgetUsage, budgetDivisions, setBudget
     }
 
     return (
-        <Stack divider={<StackDivider />} p="5rem" pr="10rem" pl="10rem" width="100vw" height="100vh" bg="primary_bg" direction="column" alignItems="center">
+        <Stack divider={<StackDivider />} pt="4rem" pr={["1rem", "2rem", "2rem", "10rem"]} pl={["1rem", "2rem", "2rem", "10rem"]} width="100vw" height="100vh" bg="primary_bg" direction="column" alignItems="center" spacing="1rem">
             <Heading variant="alt">Your Budgets</Heading>
-            <HStack>
+            <Stack direction={["column", "column", "column", "row"]}>
                 {displayCardBudget()}
-            </HStack>
+            </Stack>
         </Stack>
     )
 }
